@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Random Codes Display</title>
+</head>
+<body>
+    <div id="codesContainer"></div>
+    <button id="connectWallet">Connect Phantom Wallet</button>
+
+    <script>
+        function generateRandomCode(length) {
+            const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+            let result = '';
+            const charactersLength = characters.length;
+            for (let i = 0; i < length; i++) {
+                result += characters.charAt(Math.floor(Math.random() * charactersLength));
+            }
+            return result;
+        }
+
+        function displayRandomCodes(numberOfCodes, codeLength) {
+            const container = document.getElementById('codesContainer');
+            for (let i = 0; i < numberOfCodes; i++) {
+                const code = generateRandomCode(codeLength);
+                const codeElement = document.createElement('p');
+                codeElement.textContent = code;
+                container.appendChild(codeElement);
+            }
+        }
+
+        // Example: Display 5 random codes similar to the one provided
+        displayRandomCodes(5, 88);  // 88 is the length of the code you provided
+
+        // Phantom Wallet Integration
+        const connectButton = document.getElementById('connectWallet');
+
+        connectButton.addEventListener('click', async () => {
+            try {
+                const response = await window.solana.connect();
+                console.log('Connected to wallet with public key:', response.publicKey.toString());
+                alert('Connected to Phantom Wallet!');
+            } catch (err) {
+                console.error('Error connecting to Phantom Wallet:', err);
+            }
+        });
+
+        // Check if Phantom Wallet is installed
+        if (!window.solana || !window.solana.isPhantom) {
+            alert('Please install Phantom Wallet!');
+        }
+    </script>
+</body>
+</html>
